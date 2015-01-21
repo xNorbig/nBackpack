@@ -1,0 +1,64 @@
+options:
+	tag: &9Plecak &7||
+	perm: &cNie masz uprawnien.
+	open_my: &7Otworzyles swoj plecak.
+	open_other: &7Otworzyles plecak: &b{PLAYER}&7.
+on script load:
+	wait 1 tick
+	loop all players:
+		function "mybp.loadRows" {loop-player}
+on join:
+	wait 1 tick
+	function "mybp.loadRows" {player}
+function "mybp.loadRows" {}:
+	set {_player} to arg{1}
+	loop 6 times:
+		if {_player} has permission "mybp.rows.%loop-number%":
+			set {_rows} to loop-number
+		if {_rows} is not set:
+			set {_rows} to 0
+	set {myBackPack::rows::%{_player}%} to {_rows}
+function "mybp.openBackPack" {}:
+	set {_gracz} to arg{1}
+	set {_player} to arg{2}
+	open chest with {myBackPack::rows::%{_player}%} rows named "&cPlecak %{_player}%:" to {_gracz}
+	wait 1 tick
+	set {_slot} to 0
+	loop {myBackPack::backpack::%{_player}%::*}:
+		set slot {_slot} of current inventory of {_gracz} to loop-value
+		add 1 to {_slot}
+	set {myBackPack::open::%{_gracz}%} to {_player}
+	while inventory name of {_gracz} is "&cPlecak %{myBackPack::open::%{_gracz}%}%:":
+		set {myBackPack::open::%{_gracz}%} to {_player}
+		wait 5 tick
+command /myBackPack [<text>]:
+	description: myBackPack Â» Otwieranie plecaka.
+	executable by: players
+	aliases: mybp, backpack, bp, plecak, ple
+	trigger:
+		if arg 1 is not set:
+			function "mybp.loadRows" {player}
+			if {myBackPack::rows::%player%} is 0:
+				send "{@tag} {@perm}"
+				stop
+			function "mybp.openBackPack" {player and player}
+			send "{@tag} {@open_my}"
+		else:
+			function "mybp.loadRows" {arg 1 parsed as player}
+			if player doesn't have permission "mybp.others":
+				send "{@tag} {@perm}"
+				stop
+			if {myBackPack::rows::%arg 1%} is 0:
+				send "{@tag} {@perm}"
+				stop
+			function "mybp.openBackPack" {player and arg 1 parsed as player}
+			set {_open} to "{@open_other}"
+			replace all "{PLAYER}" with "%arg 1%" in {_open}
+			send "{@tag} %colored {_open}%"
+on inventory close:
+	if {myBackPack::open::%player%} is set:
+		clear {myBackPack::backpack::%{myBackPack::open::%player%}%::*}
+		loop {myBackPack::rows::%{myBackPack::open::%player%}%}*9 times:
+			if slot "%loop-number - 1%" parsed as an integer of current inventory of player is not air:
+				set {myBackPack::backpack::%{myBackPack::open::%player%}%::%loop-number - 1%} to slot "%loop-number - 1%" parsed as an integer of current inventory of player
+		clear {myBackPack::open::%player%}
