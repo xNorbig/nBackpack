@@ -1,5 +1,5 @@
 myBackpack
-`v2.0 FULL`
+`v3.0 FULL`
 
 ======
 **Link do prezentacji:**
