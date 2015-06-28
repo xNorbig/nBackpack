@@ -1,6 +1,2 @@
-nBackpack
-`v3.0 FULL`
-
-======
-**Link do prezentacji:**
+**Prezentacja skryptu:**
 http://skript.pl/index.php/topic/5055-
