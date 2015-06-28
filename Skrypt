@@ -1,5 +1,4 @@
 options:
-	tag: &f[&9Plecak&f]
 	linijki: 3
 	nazwaPlecakaWGui: &fPlecak
 	#slot 1 | slot 2 | slot 3
@@ -24,9 +23,9 @@ on rightclick:
 		open chest with {@linijki} rows named "{@nazwaPlecakaWGui}" to player
 		wait 1 tick
 		loop {@linijki}*9 times:
-			set slot loop-number - 1 of current inventory of player to {nBackPack::%player%::%loop-number%}
+			set slot loop-number - 1 of current inventory of player to {nBackpack::%player%::%loop-number%}
 on inventory close:
 	if inventory name of current inventory of player is "{@nazwaPlecakaWGui}":
-		clear {nBackPack::%player%::*}
+		clear {nBackpack::%player%::*}
 		loop {@linijki}*9 times:
-			set {nBackPack::%player%::%loop-number%} to slot "%loop-number - 1%" parsed as an integer of current inventory of player
+			set {nBackpack::%player%::%loop-number%} to slot "%loop-number - 1%" parsed as an integer of current inventory of player
