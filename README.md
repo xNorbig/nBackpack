@@ -1,2 +1,1 @@
-**Prezentacja skryptu:**
-http://skript.pl/index.php/topic/5055-
+**Prezentacja skryptu:** http://skript.pl/index.php/topic/5055-
